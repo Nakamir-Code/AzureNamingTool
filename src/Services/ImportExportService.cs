@@ -127,6 +127,7 @@ namespace AzureNamingTool.Services
                 configdata.CustomHomeContent = config.CustomHomeContent;
                 configdata.CustomLogoPath = config.CustomLogoPath;
                 configdata.CustomToolName = config.CustomToolName;
+                configdata.ShowAdminDetailsToAllUsers = config.ShowAdminDetailsToAllUsers;
 
                 // Get the security settings
                 if (includeadmin)
@@ -135,6 +136,7 @@ namespace AzureNamingTool.Services
                     configdata.AdminPassword = config.AdminPassword;
                     configdata.APIKey = config.APIKey;
                     configdata.ReadOnlyAPIKey = config.ReadOnlyAPIKey;
+                    configdata.NameGenerationAPIKey = config.NameGenerationAPIKey;
                     //IdentityHeaderName
                     configdata.IdentityHeaderName = config.IdentityHeaderName;
                     //AdminUsers
@@ -210,6 +212,10 @@ namespace AzureNamingTool.Services
                 {
                     config.ReadOnlyAPIKey = configdata.ReadOnlyAPIKey;
                 }
+                if (GeneralHelper.IsNotNull(configdata.NameGenerationAPIKey))
+                {
+                    config.NameGenerationAPIKey = configdata.NameGenerationAPIKey;
+                }
                 if (GeneralHelper.IsNotNull(configdata.IdentityHeaderName))
                 {
                     config.IdentityHeaderName = configdata.IdentityHeaderName;
@@ -257,6 +263,10 @@ namespace AzureNamingTool.Services
                 if (GeneralHelper.IsNotNull(configdata.CustomToolName))
                 {
                     config.CustomToolName = configdata.CustomToolName;
+                }
+                if (GeneralHelper.IsNotNull(configdata.ShowAdminDetailsToAllUsers))
+                {
+                    config.ShowAdminDetailsToAllUsers = configdata.ShowAdminDetailsToAllUsers;
                 }
                 var jsonWriteOptions = new JsonSerializerOptions()
                 {

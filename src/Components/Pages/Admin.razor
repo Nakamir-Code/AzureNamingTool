@@ -53,11 +53,11 @@
                         This page allows you to security settings, view cache data, and site configurations for the Azure Naming Tool.
                     </p>
                     <div class="card mb-3" style="width:auto;">
-                        <div class="card-header bg-default text-dark">
-                            <a id="versiondetailslink" class="link-dark text-decoration-none" data-bs-toggle="collapse" href="#versiondetails" role="button" aria-expanded="false" aria-controls="versiondetails">
+                        <h5 class="card-header bg-success text-white">
+                            <a class="text-decoration-none text-white" data-bs-toggle="collapse" href="#versiondetails" role="button" aria-expanded="false" aria-controls="versiondetails">
                                 <span class="oi oi-chevron-bottom" aria-hidden="true"></span> <span class="fw-bold">Version Details</span>
                             </a>
-                        </div>
+                        </h5>
                         <div class="collapse card card-body @theme.ThemeStyle" id="versiondetails">
                             <div class="mb-3">
                                 <span class="fw-bold">Current version:</span> @appversion (<a href="@releasenotesurl" target="_blank">Release Notes</a>)
@@ -70,27 +70,6 @@
                                     </div>
                                 </div>
                             }
-                            @if ((currentuser == "GlobalAdmin") && (GeneralHelper.IsNotNull(environmentvariables)))
-                            {
-                                <div class="card mb-3" style="width:auto;">
-                                    <div class="card-header bg-default text-dark">
-                                        <a id="environmentvariableslink" class="link-dark text-decoration-none" data-bs-toggle="collapse" href="#environmentvariables" role="button" aria-expanded="false" aria-controls="environmentvariables">
-                                            <span class="oi oi-chevron-bottom" aria-hidden="true"></span> <span class="fw-bold">Environment Details</span>
-                                        </a>
-                                    </div>
-                                    <div class="collapse card card-body @theme.ThemeStyle" id="environmentvariables">
-                                        <div class="mb-3">
-                                            <ul>
-                                                @foreach (var variable in environmentvariables)
-                                                {
-                                                    <li><span class="fw-bold">@variable.Key:</span> @variable.Value</li>
-                                                }
-                                            </ul>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            }
                             <div class="mb-3">
                                 <button type="button" class="btn btn-success" @onclick="@(e => SubmitGHTopic("feature"))" title="Feature request">Feature Request</button>
                                 <button type="button" class="btn btn-danger" @onclick="@(e => SubmitGHTopic("bug"))" title="Submit a bug">Submit a bug</button>
@@ -98,13 +77,72 @@
                             </div>
                         </div>
                     </div>
+                    @if (((currentuser == "GlobalAdmin") || (showadmindetailstoallusers)) && (GeneralHelper.IsNotNull(environmentvariables)))
+                    {
+                        <div class="card mb-3" style="width:auto;">
+                            <h5 class="card-header bg-primary text-white">
+                                <a class="text-decoration-none text-white" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#admindetails" role="button" aria-expanded="false" aria-controls="admindetails">
+                                    <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Admin Details
+                                </a>
+                            </h5>
+                            <div class="collapse card card-body @theme.ThemeStyle" id="admindetails">
+                                <div class="card mb-3" style="width:auto;">
+                                    <div class="card-header bg-default text-dark">
+                                        <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#viewcache" role="button" aria-expanded="false" aria-controls="viewcache">
+                                            <span class="oi oi-chevron-bottom" aria-hidden="true"></span> View Cache
+                                        </a>
+                                    </div>
+                                    <div class="collapse show card card-body @theme.ThemeStyle" id="viewcache">
+                                        <p>
+                                            Click <span class="fw-bold">View</span> to view cached data.
+                                        </p>
+                                        <p>
+                                            <button type="button" class="btn btn-primary" @onclick="@(e => AdminFormAction("viewcachedata"))" title="View Cache Data">View Cache Data</button>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card mb-3" style="width:auto;">
+                                    <div class="card-header bg-default text-dark">
+                                        <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#clearcache" role="button" aria-expanded="false" aria-controls="clearcache">
+                                            <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Clear Cache
+                                        </a>
+                                    </div>
+                                    <div class="collapse show card card-body @theme.ThemeStyle" id="clearcache">
+                                        <p>
+                                            Click <span class="fw-bold">Clear</span> to clear all cached data.
+                                        </p>
+                                        <p>
+                                            <button type="button" class="btn btn-success" @onclick="@(e => AdminFormAction("clearcache"))" title="Clear Cache">Clear Cache Data</button>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card mb-3" style="width:auto;">
+                                    <div class="card-header bg-default text-dark">
+                                        <a id="environmentvariableslink" class="link-dark text-decoration-none" data-bs-toggle="collapse" href="#environmentvariables" role="button" aria-expanded="false" aria-controls="environmentvariables">
+                                            <span class="oi oi-chevron-bottom" aria-hidden="true"></span> <span class="fw-bold">Environment Details</span>
+                                        </a>
+                                    </div>
+                                    <div class="collapse show card card-body @theme.ThemeStyle" id="environmentvariables">
+                                        <div class="mb-3 text-break">
+                                            <ul>
+                                                @foreach (var variable in environmentvariables)
+                                                {
+                                                    <li><span class="fw-bold text-wrap">@variable.Key:</span> @variable.Value</li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
                     <div class="card mb-3" style="width:auto;">
                         <h5 class="card-header text-white bg-secondary text-white">
                             <a class="text-decoration-none text-white" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#customization" role="button" aria-expanded="false" aria-controls="customization">
                                 <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Customization
                             </a>
                         </h5>
-                        <div class="collapse show card card-body @theme.ThemeStyle" id="customization">
+                        <div class="collapse card card-body @theme.ThemeStyle" id="customization">
                             <p>
                                 This section allows your to customize the Azure Naming Tool site. This includes Custom Home content, logo, and navigation links displayed for non-admin users.
                             </p>
@@ -317,6 +355,201 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="card mb-3">
+                        <h5 class="card-header text-white bg-secondary text-white">
+                            <a class="text-decoration-none text-white" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#sitesettings" role="button" aria-expanded="false" aria-controls="sitesettings">
+                                <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Site Settings
+                            </a>
+                        </h5>
+                        <div class="collapse card card-body @theme.ThemeStyle" id="sitesettings">
+                            <p>
+                                This section allows you to configure the site settings for the Azure Naming Tool.
+                            </p>
+                            <div class="card mb-3" style="width:auto;">
+                                <div class="card-header bg-default text-dark">
+                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#duplicatenames" role="button" aria-expanded="false" aria-controls="duplicatenames">
+                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Allow Duplicate Names
+                                    </a>
+                                </div>
+                                <div class="collapse show card card-body @theme.ThemeStyle" id="duplicatenames">
+                                    <div class="mb-3">
+                                        <p>
+                                            By default, the Azure Naming Tool prevents duplicate resource names from being generated. This setting can be used to allow duplicate names.
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <label class="switch" title="Duplicate Names Allowed">
+                                            <input type="checkbox" checked="@duplicatenamesallowed" @oninput='args => SettingChanged(args, "duplicatenamesallowed")'>
+                                            <span class="slider round"></span>
+                                        </label>
+                                        <span class="align-text-top"> Enable</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-3" style="width:auto;">
+                                <div class="card-header bg-default text-dark">
+                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#autoincrementresourceinstance" role="button" aria-expanded="false" aria-controls="resourcetypeediting">
+                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Auto-Increment Resource Instance
+                                    </a>
+                                </div>
+                                <div class="collapse show card card-body @theme.ThemeStyle" id="autoincrementresourceinstance">
+                                    <div class="mb-3">
+                                        <p>
+                                            If enabled, this setting will increment the <span class="fw-bold">Resource Instance</span> value to next number for the generated resource type name.
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <label class="switch" title="Auto-Increment Resource Instance">
+                                            <input type="checkbox" checked="@autoincrementresourceinstance" @oninput='args => SettingChanged(args, "autoincrementresourceinstance")'>
+                                            <span class="slider round"></span>
+                                        </label>
+                                        <span class="align-text-top"> Enable</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-3" style="width:auto;">
+                                <div class="card-header bg-default text-dark">
+                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#resourcetypeediting" role="button" aria-expanded="false" aria-controls="resourcetypeediting">
+                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Resource Type Editing
+                                    </a>
+                                </div>
+                                <div class="collapse show card card-body @theme.ThemeStyle" id="resourcetypeediting">
+                                    <div class="mb-3">
+                                        <p>
+                                            By default, <span class="fw-bold">Resource Type Validation</span> is configured to match the Azure portal. These values can be overriden by enabling the following setting.
+                                        </p>
+                                        <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                                            <h4>ATTENTION</h4>
+                                            <p class="fw-bold">
+                                                Please see the <a href="https://github.com/mspnp/AzureNamingTool/wiki/Resource-Type-Editing" target="_blank">Resource Type Editing documentation</a> for guidance on metadata editing.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="switch" title="Resource Type Editing Enabled">
+                                            <input type="checkbox" checked="@resourcetypeeditingallowed" @oninput='args => SettingChanged(args, "resourcetypeeditingallowed")'>
+                                            <span class="slider round"></span>
+                                        </label>
+                                        <span class="align-text-top"> Enable</span>
+                                    </div>
+                                </div>
+                            </div>
+                            @if (currentuser == "GlobalAdmin")
+                            {
+                                <div class="card mb-3" style="width:auto;">
+                                    <div class="card-header bg-default text-dark">
+                                        <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#admindatatoallusers" role="button" aria-expanded="false" aria-controls="admindatatoallusers">
+                                            <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Show Admin Data To All Users
+                                        </a>
+                                    </div>
+                                    <div class="collapse show card card-body @theme.ThemeStyle" id="admindatatoallusers">
+                                        <div class="mb-3">
+                                            <p>
+                                                By default, admin details are only displayed for the Global Admin. This setting enables admin details to be shown to all admin users.
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <label class="switch" title="Show Admin Details To All Users">
+                                                <input type="checkbox" checked="@showadmindetailstoallusers" @oninput='args => SettingChanged(args, "showadmindetailstoallusers")'>
+                                                <span class="slider round"></span>
+                                            </label>
+                                            <span class="align-text-top"> Enable</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            <!--// TO DO: Implement retention of the selected values
+                            <div class="card mb-3" style="width:auto;">
+                                <div class="card-header bg-default text-dark">
+                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#retaingenerateselections" role="button" aria-expanded="false" aria-controls="retaingenerateselections">
+                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Retain Generate Selections
+                                    </a>
+                                </div>
+                                <div class="collapse show card card-body @theme.ThemeStyle" id="retaingenerateselections">
+                                    <div class="mb-3">
+                                        <p>
+                                            Enable/Disable <span class="fw-bold">Retaining of selections after name generation</span> for all users.
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <label class="switch" title="Retain Generate Seelctions">
+                                            <input type="checkbox" checked="@retaingenerateselections" @oninput='args => SettingChanged(args, "retaingenerateselections")'>
+                                            <span class="slider round"></span>
+                                        </label>
+                                        <span class="align-text-top"> Enable</span>
+                                    </div>
+                                </div>
+                            </div>
+                             -->
+                            <div class="card mb-3" style="width:auto;">
+                                <div class="card-header bg-default text-dark">
+                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#connectivitycheck" role="button" aria-expanded="false" aria-controls="connectivitycheck">
+                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Connectivity Check
+                                    </a>
+                                </div>
+                                <div class="collapse show card card-body @theme.ThemeStyle" id="connectivitycheck">
+                                    <div class="mb-3">
+                                        <p>
+                                            The Azure Naming Tool will verify the tool has internet connectivity to enable update features. Use this setting to disable the connectivity check functionality.
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <label class="switch" title="Connectivity Check Enabled">
+                                            <input type="checkbox" checked="@connectivitycheckenabled" @oninput='args => SettingChanged(args, "connectivitycheckenabled")'>
+                                            <span class="slider round"></span>
+                                        </label>
+                                        <span class="align-text-top"> Enable</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-3" style="width:auto;">
+                                <div class="card-header bg-default text-dark">
+                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#generationwebhook" role="button" aria-expanded="false" aria-controls="generationwebhook">
+                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Generation Webhook
+                                    </a>
+                                </div>
+                                <div class="collapse show card card-body @theme.ThemeStyle" id="generationwebhook">
+                                    <div class="mb-3">
+                                        <p>
+                                            The Azure Naming Tool can post generated names to a webhook. This can be used to integrate with other systems. Enter a valid URL below to save the webhook setting.
+                                        </p>
+                                        <p>
+                                            Generated names will be posted using the <span class="fw-bold"><a href="https://github.com/mspnp/AzureNamingTool/blob/main/src/Models/GeneratedName.cs" target="_blank">GeneratedName</a></span> JSON format.
+                                        </p>
+                                        <p>
+                                            <button type="button" class="btn btn-primary" @onclick="@(e => AdminFormAction("samplepost"))" title="Sample Post">Sample Post</button>
+                                        </p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="fw-bold">URL</div>
+                                        <input title="Generation Webhook" id="currentgenerationwebhook" class="form-control" type="text" @onchange="@((ui) => { SetFormValue("generationwebhook",(string)ui.Value!);})" value="@currentgenerationwebhook" />
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-success w-auto" @onclick="@(e => AdminFormAction("generationwebhooksave"))" title="Save Generate Webhook">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-3" style="width:auto;">
+                                <div class="card-header bg-default text-dark">
+                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#resetsitesettings" role="button" aria-expanded="false" aria-controls="resetsitesettings">
+                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Reset Site Settings
+                                    </a>
+                                </div>
+                                <div class="collapse show card card-body @theme.ThemeStyle" id="resetsitesettings">
+                                    <div class="mb-3">
+                                        <p>
+                                            This will reset <span class="fw-bold">ALL</span> site settings to the default values. This includes site settings and cusomtizations. This cannot be undone!
+                                        </p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <button type="button" class="btn btn-danger w-auto" @onclick="@(e => AdminFormAction("resetsitesettings"))" title="Reset Site Settings">Reset Site Settings</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card mb-3">
                         <h5 class="card-header text-white bg-secondary text-white">
                             <a class="text-decoration-none text-white" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#security" role="button" aria-expanded="false" aria-controls="security">
@@ -375,6 +608,26 @@
                                                     <input title="Full Access API Key" id="currentapikey" class="form-control mb-3" type="text" @onchange="@((ui) => { SetFormValue("apikey",(string)ui.Value!);})" value="@currentapikey" />
                                                     <button type="button" class="btn btn-success" @onclick="@(e => AdminFormAction("apikeysave"))" title="Save Full Access API Key">Save</button>
                                                     <button type="button" class="btn btn-success" @onclick="@(e => AdminFormAction("apikeygenerate"))" title="Generate Full Access API Key">Generate</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card mb-3">
+                                            <div class="card-header bg-default text-dark">
+                                                <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#updatenamegenerationapikey" role="button" aria-expanded="false" aria-controls="updatenamegenerationapikey">
+                                                    <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Name Generation API Key
+                                                </a>
+                                            </div>
+                                            <div class="collapse show  card card-body @theme.ThemeStyle" id="updatenamegenerationapikey">
+                                                <p>
+                                                    The current <span class="fw-bold">Name Generation API Key</span> is displayed. This key provides <span class="fw-bold">Name Generation</span> access to the API (only for name generation).
+                                                </p>
+                                                <p>
+                                                    Click <span class="fw-bold">Generate</span> to create a new random <span class="fw-bold">Name Generation API Key</span>, or update the text to the desired value.
+                                                </p>
+                                                <div class="form-group">
+                                                    <input title="Name Generation API Key" id="currentnamegenerationapikey" class="form-control mb-3" type="text" @onchange="@((ui) => { SetFormValue("namegenerationapikey",(string)ui.Value!);})" value="@currentnamegenerationapikey" />
+                                                    <button type="button" class="btn btn-success" @onclick="@(e => AdminFormAction("namegenerationapikeysave"))" title="Save Name Generation API Key">Save</button>
+                                                    <button type="button" class="btn btn-success" @onclick="@(e => AdminFormAction("namegenerationapikeygenerate"))" title="Generate Name Generation API Key">Generate</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -551,211 +804,6 @@
                             }
                         </div>
                     </div>
-                    <div class="card mb-3">
-                        <h5 class="card-header text-white bg-secondary text-white">
-                            <a class="text-decoration-none text-white" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#cache" role="button" aria-expanded="false" aria-controls="cache">
-                                <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Cache
-                            </a>
-                        </h5>
-                        <div class="collapse card card-body @theme.ThemeStyle" id="cache">
-                            <p>
-                                This section allows you to view/manage cached data for the tool.
-                            </p>
-                            <div class="card mb-3" style="width:auto;">
-                                <div class="card-header bg-default text-dark">
-                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#viewcache" role="button" aria-expanded="false" aria-controls="viewcache">
-                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> View Cache
-                                    </a>
-                                </div>
-                                <div class="collapse show card card-body @theme.ThemeStyle" id="viewcache">
-                                    <p>
-                                        Click <span class="fw-bold">View</span> to view cached data.
-                                    </p>
-                                    <p>
-                                        <button type="button" class="btn btn-primary" @onclick="@(e => AdminFormAction("viewcachedata"))" title="View Cache Data">View Cache Data</button>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="card mb-3" style="width:auto;">
-                                <div class="card-header bg-default text-dark">
-                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#clearcache" role="button" aria-expanded="false" aria-controls="clearcache">
-                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Clear Cache
-                                    </a>
-                                </div>
-                                <div class="collapse show card card-body @theme.ThemeStyle" id="clearcache">
-                                    <p>
-                                        Click <span class="fw-bold">Clear</span> to clear all cached data.
-                                    </p>
-                                    <p>
-                                        <button type="button" class="btn btn-success" @onclick="@(e => AdminFormAction("clearcache"))" title="Clear Cache">Clear Cache Data</button>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card mb-3">
-                        <h5 class="card-header text-white bg-secondary text-white">
-                            <a class="text-decoration-none text-white" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#sitesettings" role="button" aria-expanded="false" aria-controls="sitesettings">
-                                <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Site Settings
-                            </a>
-                        </h5>
-                        <div class="collapse card card-body @theme.ThemeStyle" id="sitesettings">
-                            <p>
-                                This section allows you to configure the site settings for the Azure Naming Tool.
-                            </p>
-                            <div class="card mb-3" style="width:auto;">
-                                <div class="card-header bg-default text-dark">
-                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#duplicatenames" role="button" aria-expanded="false" aria-controls="duplicatenames">
-                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Allow Duplicate Names
-                                    </a>
-                                </div>
-                                <div class="collapse show card card-body @theme.ThemeStyle" id="duplicatenames">
-                                    <div class="mb-3">
-                                        <p>
-                                            By default, the Azure Naming Tool prevents duplicate resource names from being generated. This setting can be used to allow duplicate names.
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <label class="switch" title="Duplicate Names Allowed">
-                                            <input type="checkbox" checked="@duplicatenamesallowed" @oninput='args => SettingChanged(args, "duplicatenamesallowed")'>
-                                            <span class="slider round"></span>
-                                        </label>
-                                        <span class="align-text-top"> Enable</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3" style="width:auto;">
-                                <div class="card-header bg-default text-dark">
-                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#autoincrementresourceinstance" role="button" aria-expanded="false" aria-controls="resourcetypeediting">
-                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Auto-Increment Resource Instance
-                                    </a>
-                                </div>
-                                <div class="collapse show card card-body @theme.ThemeStyle" id="autoincrementresourceinstance">
-                                    <div class="mb-3">
-                                        <p>
-                                            If enabled, this setting will increment the <span class="fw-bold">Resource Instance</span> value to next number for the generated resource type name.
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <label class="switch" title="Auto-Increment Resource Instance">
-                                            <input type="checkbox" checked="@autoincrementresourceinstance" @oninput='args => SettingChanged(args, "autoincrementresourceinstance")'>
-                                            <span class="slider round"></span>
-                                        </label>
-                                        <span class="align-text-top"> Enable</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3" style="width:auto;">
-                                <div class="card-header bg-default text-dark">
-                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#resourcetypeediting" role="button" aria-expanded="false" aria-controls="resourcetypeediting">
-                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Resource Type Editing
-                                    </a>
-                                </div>
-                                <div class="collapse show card card-body @theme.ThemeStyle" id="resourcetypeediting">
-                                    <div class="mb-3">
-                                        <p>
-                                            By default, <span class="fw-bold">Resource Type Validation</span> is configured to match the Azure portal. These values can be overriden by enabling the following setting.
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <label class="switch" title="Resource Type Editing Enabled">
-                                            <input type="checkbox" checked="@resourcetypeeditingallowed" @oninput='args => SettingChanged(args, "resourcetypeeditingallowed")'>
-                                            <span class="slider round"></span>
-                                        </label>
-                                        <span class="align-text-top"> Enable</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--// TO DO: Implement retention of the selected values
-                            <div class="card mb-3" style="width:auto;">
-                                <div class="card-header bg-default text-dark">
-                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#retaingenerateselections" role="button" aria-expanded="false" aria-controls="retaingenerateselections">
-                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Retain Generate Selections
-                                    </a>
-                                </div>
-                                <div class="collapse show card card-body @theme.ThemeStyle" id="retaingenerateselections">
-                                    <div class="mb-3">
-                                        <p>
-                                            Enable/Disable <span class="fw-bold">Retaining of selections after name generation</span> for all users.
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <label class="switch" title="Retain Generate Seelctions">
-                                            <input type="checkbox" checked="@retaingenerateselections" @oninput='args => SettingChanged(args, "retaingenerateselections")'>
-                                            <span class="slider round"></span>
-                                        </label>
-                                        <span class="align-text-top"> Enable</span>
-                                    </div>
-                                </div>
-                            </div>
-                             -->
-                            <div class="card mb-3" style="width:auto;">
-                                <div class="card-header bg-default text-dark">
-                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#connectivitycheck" role="button" aria-expanded="false" aria-controls="connectivitycheck">
-                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Connectivity Check
-                                    </a>
-                                </div>
-                                <div class="collapse show card card-body @theme.ThemeStyle" id="connectivitycheck">
-                                    <div class="mb-3">
-                                        <p>
-                                            The Azure Naming Tool will verify the tool has internet connectivity to enable update features. Use this setting to disable the connectivity check functionality.
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <label class="switch" title="Connectivity Check Enabled">
-                                            <input type="checkbox" checked="@connectivitycheckenabled" @oninput='args => SettingChanged(args, "connectivitycheckenabled")'>
-                                            <span class="slider round"></span>
-                                        </label>
-                                        <span class="align-text-top"> Enable</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3" style="width:auto;">
-                                <div class="card-header bg-default text-dark">
-                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#generationwebhook" role="button" aria-expanded="false" aria-controls="generationwebhook">
-                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Generation Webhook
-                                    </a>
-                                </div>
-                                <div class="collapse show card card-body @theme.ThemeStyle" id="generationwebhook">
-                                    <div class="mb-3">
-                                        <p>
-                                            The Azure Naming Tool can post generated names to a webhook. This can be used to integrate with other systems. Enter a valid URL below to save the webhook setting.
-                                        </p>
-                                        <p>
-                                            Generated names will be posted using the <span class="fw-bold"><a href="https://github.com/mspnp/AzureNamingTool/blob/main/src/Models/GeneratedName.cs" target="_blank">GeneratedName</a></span> JSON format.
-                                        </p>
-                                        <p>
-                                            <button type="button" class="btn btn-primary" @onclick="@(e => AdminFormAction("samplepost"))" title="Sample Post">Sample Post</button>
-                                        </p>
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="fw-bold">URL</div>
-                                        <input title="Generation Webhook" id="currentgenerationwebhook" class="form-control" type="text" @onchange="@((ui) => { SetFormValue("generationwebhook",(string)ui.Value!);})" value="@currentgenerationwebhook" />
-                                    </div>
-                                    <div>
-                                        <button type="button" class="btn btn-success w-auto" @onclick="@(e => AdminFormAction("generationwebhooksave"))" title="Save Generate Webhook">Save</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3" style="width:auto;">
-                                <div class="card-header bg-default text-dark">
-                                    <a class="text-decoration-none text-dark" data-bs-toggle="collapse" style="display:block;font-weight:bold;" href="#resetsitesettings" role="button" aria-expanded="false" aria-controls="resetsitesettings">
-                                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> Reset Site Settings
-                                    </a>
-                                </div>
-                                <div class="collapse show card card-body @theme.ThemeStyle" id="resetsitesettings">
-                                    <div class="mb-3">
-                                        <p>
-                                            This will reset <span class="fw-bold">ALL</span> site settings to the default values. This includes site settings and cusomtizations. This cannot be undone!
-                                        </p>
-                                    </div>
-                                    <div class="mb-3">
-                                        <button type="button" class="btn btn-danger w-auto" @onclick="@(e => AdminFormAction("resetsitesettings"))" title="Reset Site Settings">Reset Site Settings</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 }
             </div>
             <div>
@@ -780,6 +828,7 @@
     private string newpassword = String.Empty;
     private string currentapikey = String.Empty;
     private string currentreadonlyapikey = String.Empty;
+    private string currentnamegenerationapikey = String.Empty;
     private string currentidentityheadername = String.Empty;
     private string currentidentityprovider = String.Empty;
     private ResponseMessage message = new();
@@ -797,6 +846,7 @@
     private bool referenceenabled = false;
     private bool latestnewsenabled = false;
     private bool retaingenerateselections = false;
+    private bool showadmindetailstoallusers = false;
     private string customhomecontent = String.Empty;
     MarkdownEditor mdCustomHomeContent = new();
     private string customlogopath = String.Empty;
@@ -809,8 +859,6 @@
     private List<KeyValuePair<string, string>> environmentvariables = new();
     private string releasenotesurl = String.Empty;
     private long maxFileSize = 2000000;
-    private int maxAllowedFiles = 1;
-    private bool isLoading;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -827,6 +875,7 @@
             {
                 currentapikey = GeneralHelper.DecryptString(config.APIKey!, config.SALTKey!);
                 currentreadonlyapikey = GeneralHelper.DecryptString(config.ReadOnlyAPIKey!, config.SALTKey!);
+                currentnamegenerationapikey = GeneralHelper.DecryptString(config.NameGenerationAPIKey!, config.SALTKey!);
                 // Determine if the version notification has been dismissed
                 var resultVersionAlert = await session.GetAsync<bool>("versionalert-" + appversion + "-shown");
                 versionalertshown = resultVersionAlert.Success ? resultVersionAlert.Value : false;
@@ -841,6 +890,7 @@
                 referenceenabled = Convert.ToBoolean(ConfigurationHelper.GetAppSetting("ReferenceEnabled"));
                 latestnewsenabled = Convert.ToBoolean(ConfigurationHelper.GetAppSetting("LatestNewsEnabled"));
                 retaingenerateselections = Convert.ToBoolean(ConfigurationHelper.GetAppSetting("RetainGenerateSelections"));
+                showadmindetailstoallusers = Convert.ToBoolean(ConfigurationHelper.GetAppSetting("ShowAdminDetailsToAllUsers"));
                 customhomecontent = ConfigurationHelper.GetAppSetting("CustomHomeContent", false);
                 //await mdCustomHomeContent.SetValueAsync(customhomecontent);
                 customlogopath = ConfigurationHelper.GetAppSetting("CustomLogoPath", false);
@@ -1021,6 +1071,62 @@
                         message.Type = MessageTypesEnum.ERROR;
                         message.Header = "ERROR";
                         message.Message = "There was a problem generating the Full Access API Key!";
+                    }
+                }
+                else
+                {
+                    displaymessage = false;
+                }
+                break;
+            case "namegenerationapikeysave":
+                confirm = await ModalHelper.ShowConfirmationModal(Modal!, "ATTENTION", "<div class=\"my-4\">This will update the Name Generation API Key.</div><div class=\"my-4\">Are you sure?</div>", "bg-danger", theme);
+                if (confirm)
+                {
+                    serviceResponse = await AdminService.UpdateAPIKey(currentnamegenerationapikey, "namegeneration");
+                    if (serviceResponse.Success)
+                    {
+                        message.Type = MessageTypesEnum.SUCCESS;
+                        message.Header = "SUCCESS";
+                        message.Message = "Name Generation API Key updated!";
+                    }
+                    else
+                    {
+                        message.Type = MessageTypesEnum.ERROR;
+                        message.Header = "ERROR";
+                        message.Message = "There was a problem updating the Name Generation API Key!";
+                    }
+                }
+                else
+                {
+                    displaymessage = false;
+                }
+                break;
+            case "namegenerationapikeygenerate":
+                confirm = await ModalHelper.ShowConfirmationModal(Modal!, "ATTENTION", "<div class=\"my-4\">This will generate a new Name Generation API Key.</div><div class=\"my-4\">Are you sure?</div>", "bg-danger", theme);
+                if (confirm)
+                {
+                    serviceResponse = await AdminService.GenerateAPIKey("namegeneration");
+                    if (serviceResponse.Success)
+                    {
+                        if (GeneralHelper.IsNotNull(serviceResponse.ResponseObject))
+                        {
+                            currentnamegenerationapikey = serviceResponse.ResponseObject!;
+                            message.Type = MessageTypesEnum.SUCCESS;
+                            message.Header = "SUCCESS";
+                            message.Message = "Name Generation API Key updated!";
+                        }
+                        else
+                        {
+                            message.Type = MessageTypesEnum.ERROR;
+                            message.Header = "ERROR";
+                            message.Message = "There was a problem generating the Name Generation API Key!";
+                        }
+                    }
+                    else
+                    {
+                        message.Type = MessageTypesEnum.ERROR;
+                        message.Header = "ERROR";
+                        message.Message = "There was a problem generating the Name Generation API Key!";
                     }
                 }
                 else
@@ -1269,6 +1375,7 @@
                     ConfigurationHelper.SetAppSetting("CustomToolName", String.Empty, false);
                     ConfigurationHelper.SetAppSetting("ConnectivityCheckEnabled", resetconfig.ConnectivityCheckEnabled!, false);
                     ConfigurationHelper.SetAppSetting("GenerationWebhook", String.Empty, true);
+                    ConfigurationHelper.SetAppSetting("ShowAdminDataToAllUsers", String.Empty, true);
                     AdminLogService.PostItem(new AdminLogMessage() { Title = MessageTypesEnum.SUCCESS.ToString(), Message = "Site Settings reset!", Source = currentuser });
                     NavigationManager.NavigateTo("admin?reset=true", true);
                 }
@@ -1347,6 +1454,9 @@
                 break;
             case "apikey":
                 currentapikey = value;
+                break;
+            case "namegenerationapikey":
+                currentnamegenerationapikey = value;
                 break;
             case "readonlyapikey":
                 currentreadonlyapikey = value;
@@ -1451,6 +1561,13 @@
                         {
                             ConfigurationHelper.SetAppSetting("RetainGenerateSelections", e.Value!.ToString() ?? "");
                             message.Message = "Retain Generate Selections setting updated to " + e.Value?.ToString()!.ToUpper() ?? "" + "!";
+                        }
+                        break;
+                    case "showadmindetailstoallusers":
+                        if (GeneralHelper.IsNotNull(e.Value))
+                        {
+                            ConfigurationHelper.SetAppSetting("ShowAdminDetailsToAllUsers", e.Value!.ToString() ?? "");
+                            message.Message = "Show Admin Details To All Users setting updated to " + e.Value?.ToString()!.ToUpper() ?? "" + "!";
                         }
                         break;
                 }

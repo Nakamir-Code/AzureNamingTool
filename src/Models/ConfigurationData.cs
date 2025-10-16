@@ -95,6 +95,11 @@ namespace AzureNamingTool.Models
         public string? ReadOnlyAPIKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the Name Generation API key.
+        /// </summary>
+        public string? NameGenerationAPIKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the dismissed alerts.
         /// </summary>
         public string? DismissedAlerts { get; set; }
@@ -174,5 +179,10 @@ namespace AzureNamingTool.Models
         /// Gets or sets custom tool name.
         /// </summary>
         public string? CustomToolName { get; set; } = String.Empty;
+
+        /// <summary>
+        /// Gets or sets whether admin details are shown to all users.
+        /// </summary>
+        public string? ShowAdminDetailsToAllUsers { get; set; } = "True";
     }
 }

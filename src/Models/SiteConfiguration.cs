@@ -26,6 +26,11 @@
         public string? ReadOnlyAPIKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the Name Generation API key.
+        /// </summary>
+        public string? NameGenerationAPIKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the theme of the application.
         /// </summary>
         public string? AppTheme { get; set; }
@@ -114,5 +119,10 @@
         /// Gets or sets custom tool name.
         /// </summary>
         public string? CustomToolName { get; set; } = String.Empty;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to display admin data to all admin users.
+        /// </summary>
+        public string? ShowAdminDetailsToAllUsers { get; set; } = "True";
     }
 }
