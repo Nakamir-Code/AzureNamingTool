@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>true</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<!-- NuGet Package metadata -->
+		<PackageId>AzureNamingTool.Models</PackageId>
+		<Version>4.3.2</Version>
+		<Authors>Microsoft</Authors>
+		<Company>Microsoft</Company>
+		<Description>Models and DTOs for Azure Naming Tool API. This package contains all the request/response models needed to interact with the Azure Naming Tool API without requiring Blazor or ASP.NET Core Web dependencies.</Description>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryUrl>https://github.com/Nakamir-Code/AzureNamingTool</RepositoryUrl>
+		<PackageTags>azure;naming;conventions;models;dto</PackageTags>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Include="..\src\Helpers\MessageTypesEnum.cs" Visible="false" />
+		<Compile Include="..\src\Models\**\*.cs" />
+	</ItemGroup>
+</Project>

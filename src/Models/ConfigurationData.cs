@@ -1,5 +1,4 @@
 ﻿using AzureNamingTool.Models;
-using AzureNamingTool.Components.Pages;
 using System.Collections.Generic;
 
 namespace AzureNamingTool.Models
