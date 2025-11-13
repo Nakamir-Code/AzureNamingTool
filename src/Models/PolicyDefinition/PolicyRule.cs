@@ -11,18 +11,18 @@ namespace AzureNamingTool.Models
     /// </remarks>
     /// <param name="fullName">The full name of the policy rule.</param>
     /// <param name="delimeter">The delimiter character used in the full name.</param>
-    public class PolicyRule(String fullName, Char delimeter = '-')
+    public class PolicyRule(string fullName, char delimeter = '-')
     {
 
         /// <summary>
         /// Gets or sets the delimiter character used in the full name.
         /// </summary>
-        public Char Delimeter { get; set; } = delimeter;
+        public char Delimeter { get; set; } = delimeter;
 
         /// <summary>
         /// Gets or sets the full name of the policy rule.
         /// </summary>
-        public String FullName { get; set; } = fullName;
+        public string FullName { get; set; } = fullName;
 
         /// <summary>
         /// Gets the level of the policy rule based on the number of delimiters in the full name.
@@ -32,7 +32,7 @@ namespace AzureNamingTool.Models
         /// <summary>
         /// Gets the name of the policy rule extracted from the full name.
         /// </summary>
-        public String Name { get { return FullName[StartIndex..LastIndex]; } }
+        public string Name { get { return FullName.Substring(StartIndex, LastIndex - StartIndex); } }
 
         /// <summary>
         /// Gets the length of the policy rule name.
@@ -60,7 +60,7 @@ namespace AzureNamingTool.Models
         /// <param name="value">The full name.</param>
         /// <param name="toFind">The delimiter character.</param>
         /// <returns>The index before the last occurrence of the delimiter.</returns>
-        static int BeforeLastIndexOf(String value, Char toFind)
+        static int BeforeLastIndexOf(string value, char toFind)
         {
             int result = 0;
             for (int i = value.LastIndexOf(toFind) - 1; i > 0; i--)
@@ -86,7 +86,7 @@ namespace AzureNamingTool.Models
         /// <returns>The hash code for the policy rule.</returns>
         public override int GetHashCode()
         {
-            return (String.Join(',', Group) + Name).GetHashCode();
+            return (string.Join(",", Group) + Name).GetHashCode();
         }
     }
   }

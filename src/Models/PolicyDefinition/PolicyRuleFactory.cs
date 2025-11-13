@@ -20,7 +20,7 @@ namespace AzureNamingTool.Models
 		internal static string GetNameValidationRules(List<PolicyRule> policies, Char delimiter, PolicyEffects effect = PolicyEffects.Deny)
 		{
 			var ifHeader = "\"if\": {\"allOf\": [";
-			var policyGroups = policies.GroupBy(x => String.Join(',', x.Group));
+			var policyGroups = policies.GroupBy(x => string.Join(",", x.Group));
 			var ifContent = GenerateConditions(policyGroups);
 			var ifFooter = "]}";
 			var thenContent = ", \"then\": {\"effect\":\"" + effect.ToString().ToLower() + "\"}";
@@ -36,7 +36,7 @@ namespace AzureNamingTool.Models
 		/// <returns>The JSON representation of the main condition.</returns>
 		static string GetMainCondition(List<PolicyRule> conditions)
 		{
-			return "{\"not\": { \"value\": \"[substring(field('name'), " + conditions.First().StartIndex + ", " + conditions.First().Length + ")]\",\"in\": [" + String.Join(',', conditions.Select(x => "\"" + x.Name + "\"").Distinct()) + "]}}";
+			return "{\"not\": { \"value\": \"[substring(field('name'), " + conditions.First().StartIndex + ", " + conditions.First().Length + ")]\",\"in\": [" + string.Join(",", conditions.Select(x => "\"" + x.Name + "\"").Distinct()) + "]}}";
 		}
 
 		/// <summary>

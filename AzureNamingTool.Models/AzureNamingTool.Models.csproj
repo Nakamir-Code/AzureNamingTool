@@ -1,8 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>netstandard2.0</TargetFramework>
 		<ImplicitUsings>true</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
 		<!-- NuGet Package metadata -->
 		<PackageId>AzureNamingTool.Models</PackageId>
 		<Version>4.3.2</Version>
@@ -17,5 +18,9 @@
 	<ItemGroup>
 		<Compile Include="..\src\Helpers\MessageTypesEnum.cs" Visible="false" />
 		<Compile Include="..\src\Models\**\*.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+	  <PackageReference Include="System.Text.Json" Version="10.0.0" />
 	</ItemGroup>
 </Project>
