@@ -336,6 +336,7 @@ namespace AzureNamingTool.Services
                 // Get list of items
                 var newitems = new List<CustomComponent>();
                 int i = 1;
+                bool preserveIds = GeneralHelper.CanPreserveIds(items, x => x.Id);
 
                 // Determine new item id
                 foreach (CustomComponent item in items)
@@ -348,8 +349,12 @@ namespace AzureNamingTool.Services
                         return serviceResponse;
                     }
 
-                    item.Id = i;
-                    item.SortOrder = i;
+                    if (!preserveIds)
+                    {
+                        item.Id = i;
+                        item.SortOrder = i;
+                    }
+
                     newitems.Add(item);
                     i += 1;
                 }

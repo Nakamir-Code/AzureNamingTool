@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace AzureNamingTool.Models
+﻿namespace AzureNamingTool.Models
 {
     /// <summary>
     /// Represents a service response.

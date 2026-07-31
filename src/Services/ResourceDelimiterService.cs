@@ -301,11 +301,16 @@ namespace AzureNamingTool.Services
 
                 // Determine new item ids/order
                 int i = 1;
+                bool preserveIds = GeneralHelper.CanPreserveIds(newitems, x => x.Id);
                 var sorteditems = newitems.OrderBy(x => x.SortOrder).OrderByDescending(x => x.Enabled);
                 foreach (ResourceDelimiter item in sorteditems)
                 {
-                    item.Id = i;
-                    item.SortOrder = i;
+                    if (!preserveIds)
+                    {
+                        item.Id = i;
+                        item.SortOrder = i;
+                    }
+
                     i += 1;
                 }
 
