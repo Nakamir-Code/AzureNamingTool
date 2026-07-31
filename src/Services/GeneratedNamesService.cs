@@ -16,6 +16,8 @@ namespace AzureNamingTool.Services
         private readonly IConfigurationRepository<GeneratedName> _repository;
         private readonly IAdminLogService _adminLogService;
 
+        private static readonly SemaphoreSlim s_postLock = new(1, 1);
+
         public GeneratedNamesService(
             IConfigurationRepository<GeneratedName> repository,
             IAdminLogService adminLogService)
@@ -97,6 +99,9 @@ namespace AzureNamingTool.Services
         public async Task<ServiceResponse> PostItemAsync(GeneratedName generatedName)
         {
             ServiceResponse serviceResponse = new();
+
+            // Serialize the read-assign-write so two callers cannot claim the same id
+            await s_postLock.WaitAsync();
             try
             {
                 // Get the previously generated names
@@ -112,10 +117,8 @@ namespace AzureNamingTool.Services
                         generatedName.Id = 1;
                     }
 
-                    items.Add(generatedName);
-
-                    // Write items to file
-                    await _repository.SaveAllAsync(items);
+                    // Insert the single new name rather than rewriting the collection
+                    await _repository.SaveAsync(generatedName);
 
                     CacheHelper.InvalidateCacheObject("generatednames.json");
 
@@ -129,6 +132,10 @@ namespace AzureNamingTool.Services
             {
                 await _adminLogService.PostItemAsync(new AdminLogMessage { Title = "ERROR", Message = ex.Message });
                 serviceResponse.Success = false;
+            }
+            finally
+            {
+                s_postLock.Release();
             }
             return serviceResponse;
         }

@@ -139,7 +139,7 @@ public class GeneratedNamesServiceTests
             new GeneratedName { Id = 2, ResourceName = "rg-app-prod" }
         };
         _mockRepository.Setup(r => r.GetAllAsync()).ReturnsAsync(existingItems);
-        _mockRepository.Setup(r => r.SaveAllAsync(It.IsAny<IEnumerable<GeneratedName>>())).Returns(Task.CompletedTask);
+        _mockRepository.Setup(r => r.SaveAsync(It.IsAny<GeneratedName>())).Returns(Task.CompletedTask);
 
         var newItem = new GeneratedName { ResourceName = "rg-app-test" };
 
@@ -149,7 +149,8 @@ public class GeneratedNamesServiceTests
         // Assert
         result.Success.Should().BeTrue();
         newItem.Id.Should().Be(3); // Max ID + 1
-        _mockRepository.Verify(r => r.SaveAllAsync(It.Is<IEnumerable<GeneratedName>>(list => list.Count() == 3)), Times.Once);
+        _mockRepository.Verify(r => r.SaveAsync(newItem), Times.Once);
+        _mockRepository.Verify(r => r.SaveAllAsync(It.IsAny<IEnumerable<GeneratedName>>()), Times.Never);
     }
 
     [Fact]
@@ -157,7 +158,7 @@ public class GeneratedNamesServiceTests
     {
         // Arrange
         _mockRepository.Setup(r => r.GetAllAsync()).ReturnsAsync(new List<GeneratedName>());
-        _mockRepository.Setup(r => r.SaveAllAsync(It.IsAny<IEnumerable<GeneratedName>>())).Returns(Task.CompletedTask);
+        _mockRepository.Setup(r => r.SaveAsync(It.IsAny<GeneratedName>())).Returns(Task.CompletedTask);
 
         var newItem = new GeneratedName { ResourceName = "rg-app-dev" };
 
@@ -167,6 +168,7 @@ public class GeneratedNamesServiceTests
         // Assert
         result.Success.Should().BeTrue();
         newItem.Id.Should().Be(1);
-        _mockRepository.Verify(r => r.SaveAllAsync(It.Is<IEnumerable<GeneratedName>>(list => list.Count() == 1)), Times.Once);
+        _mockRepository.Verify(r => r.SaveAsync(newItem), Times.Once);
+        _mockRepository.Verify(r => r.SaveAllAsync(It.IsAny<IEnumerable<GeneratedName>>()), Times.Never);
     }
 }
