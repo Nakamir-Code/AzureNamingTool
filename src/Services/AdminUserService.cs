@@ -203,11 +203,16 @@ namespace AzureNamingTool.Services
                 // Get list of items
                 var newitems = new List<AdminUser>();
                 int i = 1;
+                bool preserveIds = GeneralHelper.CanPreserveIds(items, x => x.Id);
 
                 // Determine new item id
                 foreach (AdminUser item in items)
                 {
-                    item.Id = i;
+                    if (!preserveIds)
+                    {
+                        item.Id = i;
+                    }
+
                     newitems.Add(item);
                     i += 1;
                 }

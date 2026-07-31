@@ -169,4 +169,81 @@ public class ResourceTypeServiceTests
         savedItems!.Should().HaveCount(1);
         savedItems![0].Id.Should().Be(1);
     }
+
+    [Fact]
+    public async Task PostConfigAsync_ShouldPreserveIds_WhenIdsAreUniqueAndPositive()
+    {
+        // Arrange - payload ordered differently from its ids, as an export/import round-trip produces
+        var items = new List<ResourceType>
+        {
+            new() { Id = 122, Resource = "Data/MongoDbAtlas/clusters", ShortName = "mdbcls" },
+            new() { Id = 7, Resource = "Storage/storageAccounts", ShortName = "st" },
+            new() { Id = 314, Resource = "Compute/virtualMachines", ShortName = "vm" }
+        };
+
+        List<ResourceType>? savedItems = null;
+        _mockRepository.Setup(r => r.SaveAllAsync(It.IsAny<IEnumerable<ResourceType>>()))
+            .Callback<IEnumerable<ResourceType>>(saved => savedItems = saved.ToList())
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _service.PostConfigAsync(items);
+
+        // Assert
+        result.Success.Should().BeTrue();
+        savedItems.Should().NotBeNull();
+        savedItems!.Single(x => x.Resource == "Data/MongoDbAtlas/clusters").Id.Should().Be(122);
+        savedItems!.Single(x => x.Resource == "Storage/storageAccounts").Id.Should().Be(7);
+        savedItems!.Single(x => x.Resource == "Compute/virtualMachines").Id.Should().Be(314);
+    }
+
+    [Fact]
+    public async Task PostConfigAsync_ShouldAssignIdsByPosition_WhenAnyIdIsMissing()
+    {
+        // Arrange
+        var items = new List<ResourceType>
+        {
+            new() { Id = 0, Resource = "Storage/storageAccounts", ShortName = "st" },
+            new() { Id = 9, Resource = "Compute/virtualMachines", ShortName = "vm" }
+        };
+
+        List<ResourceType>? savedItems = null;
+        _mockRepository.Setup(r => r.SaveAllAsync(It.IsAny<IEnumerable<ResourceType>>()))
+            .Callback<IEnumerable<ResourceType>>(saved => savedItems = saved.ToList())
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _service.PostConfigAsync(items);
+
+        // Assert
+        result.Success.Should().BeTrue();
+        savedItems.Should().NotBeNull();
+        savedItems![0].Id.Should().Be(1);
+        savedItems![1].Id.Should().Be(2);
+    }
+
+    [Fact]
+    public async Task PostConfigAsync_ShouldAssignIdsByPosition_WhenIdsAreDuplicated()
+    {
+        // Arrange
+        var items = new List<ResourceType>
+        {
+            new() { Id = 5, Resource = "Storage/storageAccounts", ShortName = "st" },
+            new() { Id = 5, Resource = "Compute/virtualMachines", ShortName = "vm" }
+        };
+
+        List<ResourceType>? savedItems = null;
+        _mockRepository.Setup(r => r.SaveAllAsync(It.IsAny<IEnumerable<ResourceType>>()))
+            .Callback<IEnumerable<ResourceType>>(saved => savedItems = saved.ToList())
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _service.PostConfigAsync(items);
+
+        // Assert
+        result.Success.Should().BeTrue();
+        savedItems.Should().NotBeNull();
+        savedItems![0].Id.Should().Be(1);
+        savedItems![1].Id.Should().Be(2);
+    }
 }

@@ -167,6 +167,20 @@ namespace AzureNamingTool.Helpers
         public static bool IsNotNull([NotNullWhen(true)] object? obj) => obj != null;
 
         /// <summary>
+        /// Determines if the supplied items already carry ids that can be preserved on a bulk write.
+        /// </summary>
+        /// <typeparam name="T">The item type</typeparam>
+        /// <param name="items">The items being written</param>
+        /// <param name="getId">Selector for the item id</param>
+        /// <returns>True if every item has a unique, positive id, otherwise false</returns>
+        public static bool CanPreserveIds<T>(List<T> items, Func<T, long?> getId)
+        {
+            return items.Count > 0
+                && items.TrueForAll(x => getId(x) > 0)
+                && items.Select(getId).Distinct().Count() == items.Count;
+        }
+
+        /// <summary>
         /// Formats a resource type string.
         /// </summary>
         /// <param name="type">The resource type string</param>

@@ -238,6 +238,7 @@ namespace AzureNamingTool.Services
                 // Get list of items
                 var newitems = new List<ResourceLocation>();
                 int i = 1;
+                bool preserveIds = GeneralHelper.CanPreserveIds(items, x => x.Id);
 
                 // Determine new item id
                 foreach (ResourceLocation item in items)
@@ -250,7 +251,11 @@ namespace AzureNamingTool.Services
                         return serviceResponse;
                     }
 
-                    item.Id = i;
+                    if (!preserveIds)
+                    {
+                        item.Id = i;
+                    }
+
                     newitems.Add(item);
                     i += 1;
                 }
@@ -311,6 +316,7 @@ namespace AzureNamingTool.Services
                                     {
                                         // Update the Resource location Information
                                         ResourceLocation oldlocation = locations[i];
+                                        newlocation.Id = oldlocation.Id;
                                         newlocation.Enabled = oldlocation.Enabled;
 
                                         if ((!shortNameReset) || (String.IsNullOrEmpty(oldlocation.ShortName)))
@@ -325,12 +331,13 @@ namespace AzureNamingTool.Services
                                     else
                                     {
                                         // Add a new resource location
+                                        newlocation.Id = locations.Count > 0 ? locations.Max(x => x.Id) + 1 : 1;
                                         locations.Add(newlocation);
                                     }
                                 }
 
                                 // Update the settings file
-                                serviceResponse = await PostConfigAsync(locations);
+                                serviceResponse = await PostConfigAsync([.. locations.OrderBy(x => x.Id)]);
 
                                 // Update the repository file
                                 await FileSystemHelper.WriteFile("resourcelocations.json", refreshdata, "repository/");

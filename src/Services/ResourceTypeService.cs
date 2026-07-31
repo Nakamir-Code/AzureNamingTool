@@ -245,11 +245,16 @@ namespace AzureNamingTool.Services
                 // Get list of items
                 var newitems = new List<ResourceType>();
                 int i = 1;
+                bool preserveIds = GeneralHelper.CanPreserveIds(items, x => x.Id);
 
                 // Determine new item id
                 foreach (ResourceType item in items)
                 {
-                    item.Id = i;
+                    if (!preserveIds)
+                    {
+                        item.Id = i;
+                    }
+
                     newitems.Add(item);
                     i += 1;
                 }
@@ -371,6 +376,7 @@ namespace AzureNamingTool.Services
                                     {
                                         // Update the Resource Type Information
                                         ResourceType oldtype = types[i];
+                                        newtype.Id = oldtype.Id;
                                         newtype.Exclude = oldtype.Exclude;
                                         newtype.Optional = oldtype.Optional;
                                         newtype.Enabled = oldtype.Enabled;
@@ -386,12 +392,13 @@ namespace AzureNamingTool.Services
                                     else
                                     {
                                         // Add a new resource type
+                                        newtype.Id = types.Count > 0 ? types.Max(x => x.Id) + 1 : 1;
                                         types.Add(newtype);
                                     }
                                 }
 
                                 // Update the settings file
-                                serviceResponse = await PostConfigAsync(types);
+                                serviceResponse = await PostConfigAsync([.. types.OrderBy(x => x.Id)]);
 
                                 // Update the repository file
                                 await FileSystemHelper.WriteFile("resourcetypes.json", refreshdata, "repository/");
